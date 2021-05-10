@@ -50,9 +50,9 @@ def SSIM_index(imageA, imageB):
 
 
 #########################################################################################################################################
-############################### relu_scaler_Ismail  ######
+############################### relu_scaler_  ######
 #########################################################################################################################################
-def relu_scaler_Ismail(x):
+def relu_scaler_(x):
     '''
 
     :param x: scaler
@@ -158,7 +158,7 @@ y_test = np_utils.to_categorical(test_labels,10)
 # trained_model = load_model("cifar10-resnet20-30abc31d.pth")
 # trained_model = load_model("augmented_best_model.h5", compile=False)
 #
-# trained_model = tensorflow.keras.models.load_model("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/RL_adv_attacks_LP/augmented_best_model.h5")
+
 
 #model = cifar10vgg()
 
@@ -421,8 +421,8 @@ for i in range(traning_steps):
 
     ##### dynamic weight selection option in training
     if dynamic_weights_selection is True:
-        lambda_gen = relu_scaler_Ismail(lambda_gen       -   0.01 * 1     * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
-        lambda_pmf = relu_scaler_Ismail(lambda_pmf       -   0.001 * 0.001 * ((delta_js     /      D_JS)) * np.sign((delta_js     /D_JS      )-1))
+        lambda_gen = relu_scaler_(lambda_gen       -   0.01 * 1     * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
+        lambda_pmf = relu_scaler_(lambda_pmf       -   0.001 * 0.001 * ((delta_js     /      D_JS)) * np.sign((delta_js     /D_JS      )-1))
     else:
         lambda_gen = 1
         lambda_pmf = 0.02
