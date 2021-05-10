@@ -61,9 +61,9 @@ def grad_discriminant_sm_wrt_1d_img(input_image, lbl, model):
 
 
 #########################################################################################################################################
-############################### relu_scaler_Ismail  ######
+############################### relu_scaler_  ######
 #########################################################################################################################################
-def relu_scaler_Ismail(x):
+def relu_scaler_(x):
     '''
 
     :param x: scaler
@@ -303,7 +303,7 @@ for idx in range(number_of_observations):
     #
     # target_lbl_save.append(target_class)
     import pickle
-    target_class = pickle.load(open("/home/ismail/pycharmProjects/SSLTL_project/GenNNs_data/target_lbl_save.p","rb"))
+    target_class = pickle.load(open("target_lbl_save.p","rb"))
     target_class = target_class[idx]
 
     #true_label = test_labels[idx]
@@ -460,8 +460,8 @@ for idx in range(number_of_observations):
 
         ##### dynamic weight selection option in training
         if dynamic_weights_selection is True:
-            lambda_gen = relu_scaler_Ismail(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
-            lambda_pmf = relu_scaler_Ismail(lambda_pmf       -   0.05 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
+            lambda_gen = relu_scaler_(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
+            lambda_pmf = relu_scaler_(lambda_pmf       -   0.05 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
         else:
             lambda_gen = 1
             lambda_pmf = 0.02
@@ -546,21 +546,7 @@ success_rate = 100*(len(succ_tar) / number_of_observations)
 print('[succ,avg ssim,avg JS,avg run time]',[success_rate,np.mean(SSIM_tar),np.mean(JS_tar),np.mean(run_time_tar)],'seconds')
 
 
-# import pickle
-# pickle.dump(JS_tar_att_per_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/JS_tar_att_per_train_step.p","wb"))
-# pickle.dump(SSIM_tar_att_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/SSIM_tar_att_train_step.p","wb"))
-# pickle.dump(kk_2_tar_att_per_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/kk_2_tar_att_per_train_step.p","wb"))
-# pickle.dump(kk_i_tar_att_per_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/kk_i_tar_att_per_train_step.p","wb"))
 
-# import pickle
-# pickle.dump(perturbed_images_tar,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/perturbed_images_tar_2.p","wb"))
-# pickle.dump(prob_vectors_tar,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/prob_vectors_tar_2.p","wb"))
-# pickle.dump(JS_tar,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/JS_tar_2.p","wb"))
-# pickle.dump(SSIM_tar,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/SSIM_tar_2.p","wb"))
-# pickle.dump(confidence_tar,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/confidence_tar_2.p","wb"))
-
-
-#pickle.dump(target_lbl_save,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/target_lbl_save.p","wb"))
 
 
 
