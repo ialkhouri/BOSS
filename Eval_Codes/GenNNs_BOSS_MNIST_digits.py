@@ -27,9 +27,9 @@ from keras.models import load_model
 
 
 #########################################################################################################################################
-############################### relu_scaler_Ismail  ######
+############################### relu_scaler_  ######
 #########################################################################################################################################
-def relu_scaler_Ismail(x):
+def relu_scaler_(x):
     '''
 
     :param x: scaler
@@ -489,8 +489,8 @@ for i in range(traning_steps):
 
     ##### dynamic weight selection option in training
     if dynamic_weights_selection is True:
-        lambda_gen = relu_scaler_Ismail(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
-        lambda_pmf = relu_scaler_Ismail(lambda_pmf       -   0.05 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
+        lambda_gen = relu_scaler_(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
+        lambda_pmf = relu_scaler_(lambda_pmf       -   0.05 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
     else:
         lambda_gen = 1
         lambda_pmf = 0.02
@@ -532,200 +532,6 @@ plt.title('Desired PMF')
 plt.stem(Y_val_combined[0])
 plt.ylim(top=1.2)
 
-
-#########################################################################################################################################
-################## optimality condition KKT1 with similarity - Abu Ismail
-#########################################################################################################################################
-
-#### build the grad_x ( I(x,x_d) ):
-N = 784
-xx = fake_image.reshape(N)
-yy = X_desired.reshape(N)
-
-# calculate c_1, c_2
-c1 = (0.01 * ( np.max(xx) - np.min(xx)) ) * (0.01 * ( np.max(xx) - np.min(xx)) )
-c2 = (0.03 * ( np.max(xx) - np.min(xx)) ) * (0.03 * ( np.max(xx) - np.min(xx)) )
-
-# calculate mu_x and mu_y
-mu_x = np.mean(xx)
-mu_y = np.mean(yy)
-
-mu_xs = mu_x*mu_x
-mu_ys = mu_y*mu_y
-
-# calculate variance
-var_x = np.var(xx)
-var_y = np.var(yy)
-
-# calculate covariance
-covar = np.cov(xx,yy)[0,1]
-
-
-T1 = ((2*mu_x*mu_y+c1)*(4*np.ones(N) - (4*np.ones(N)/N))) / ((mu_xs*mu_xs+c1)*(var_x+var_y+c2))
-
-T2 = ((2*covar+c2)*(2*mu_x*mu_y+c1))*((2/N)*xx - (2*mu_x/N)*np.ones(N)) / ((var_x+var_y+c2)*(mu_xs*mu_xs*mu_ys*mu_ys + 2*c1*mu_xs*mu_ys+c1*c1))
-
-T3 = (2*covar+c2)*((2/N)*np.ones(N)) / ((mu_xs*mu_ys+c1)*(var_x+var_y+c2))
-
-T4 = (2*mu_x*mu_y+c1)*(2*covar+c2)*((4*mu_ys/N)*np.ones(N)) / ((var_x+var_y+c2)*((mu_xs*mu_xs*mu_ys*mu_ys + 2*c1*mu_xs*mu_ys+c1*c1)))
-
-grad_sim = T1 -T2 + T3 - T4
-
-# below is gget the gradients
-grad_matrix     = np.zeros(shape=(784,10))
-matrix_with_log = np.zeros(shape=(784,10))
-temp = np.zeros(shape=(10,))
-for i in range(10):
-    temp[i] = np.log2(output_vector_probabilities[i]  /   (output_vector_probabilities[i]+Y_desired[i])  )
-    #np.log2(output_vector_probabilities[i] / (output_vector_probabilities[i] + Y_desired[i]))
-    grad_matrix[:,i]     = grad_discriminant_sm_wrt_1d_img(fake_image, i, trained_model).numpy()[0,:,:].reshape(784,)
-    matrix_with_log[:,i] = temp[i] * grad_matrix[:,i]
-
-sum_of_all_grads_case_1 = np.sum(matrix_with_log,1)
-
-kk = np.zeros(shape=(784,))
-
-mu_1_minus_mu_2 = 0.00025
-
-kk = sum_of_all_grads_case_1 + mu_1_minus_mu_2 * grad_sim
-
-opt_ball_2 = LA.norm(kk-np.zeros(shape=(784,)),                  2       )
-opt_ball_i = LA.norm(kk-np.zeros(shape=(784,)),                  np.inf       )
-print("KKT1: solution is of distance from zeros [L2,Linf] = ", [opt_ball_2,opt_ball_i])
-
-
-# #########################################################################################################################################
-# ################## optimality condition KKT1 with similarity
-# #########################################################################################################################################
-#
-# #### build the grad_x ( I(x,x_d) ):
-# N = 784
-# xx = fake_image.reshape(N)
-# yy = X_desired.reshape(N)
-#
-# # calculate c_1, c_2
-# c1 = (0.01 * ( np.max(xx) - np.min(xx)) ) * (0.01 * ( np.max(xx) - np.min(xx)) )
-# c2 = (0.03 * ( np.max(xx) - np.min(xx)) ) * (0.03 * ( np.max(xx) - np.min(xx)) )
-#
-# # calculate mu_x and mu_y
-# mu_x = np.mean(xx)
-# mu_y = np.mean(yy)
-#
-# # calculate variance
-# var_x = np.var(xx)
-# var_y = np.var(yy)
-#
-# # calculate covariance
-# covar = np.cov(xx,yy)[0,1]
-#
-#
-# term_11 = ( (2*mu_x*mu_y) + c1 )  /  ( (mu_x*mu_x)+(mu_y*mu_y)+c1 )
-#
-# term_12 = (   ((var_x+var_y+c2) * (4*(N-1)/N) * np.ones(N))   - (2*covar +c2)*(((2/N)*xx)) - (2*mu_x/N)*np.ones(N)   )  /  ( (var_y+var_x+c2)*(var_y+var_x+c2) )
-#
-# term_1 = term_11*term_12
-#
-# term_21 = ((2*covar)+c2)/((var_y+var_x+c2))
-#
-# term_22 = (    (( (mu_x*mu_x)+(mu_y*mu_y)+c1 ) *  (2/N)*mu_y)*np.ones(N)    -     (( (2*mu_x*mu_y) + c1 ) * (2*mu_x/N)*np.ones(N))   )  /      (( (mu_x*mu_x)+(mu_y*mu_y)+c1 )*( (mu_x*mu_x)+(mu_y*mu_y)+c1 ))
-#
-# term_2 = term_21*term_22
-#
-# grad_sim = term_1 + term_2
-#
-# # below is gget the gradients
-# grad_matrix     = np.zeros(shape=(784,10))
-# matrix_with_log = np.zeros(shape=(784,10))
-# temp = np.zeros(shape=(10,))
-# for i in range(10):
-#     temp[i] = np.log2(output_vector_probabilities[i]  /   (output_vector_probabilities[i]+Y_desired[i])  )
-#     #np.log2(output_vector_probabilities[i] / (output_vector_probabilities[i] + Y_desired[i]))
-#     grad_matrix[:,i]     = grad_discriminant_sm_wrt_1d_img(fake_image, i, trained_model).numpy()[0,:,:].reshape(784,)
-#     matrix_with_log[:,i] = temp[i] * grad_matrix[:,i]
-#
-# sum_of_all_grads_case_1 = np.sum(matrix_with_log,1)
-#
-# kk = np.zeros(shape=(784,))
-#
-# mu_1_minus_mu_2 = 0.00025
-#
-# kk = sum_of_all_grads_case_1 + mu_1_minus_mu_2 * grad_sim
-#
-# opt_ball_2 = LA.norm(kk-np.zeros(shape=(784,)),                  2       )
-# opt_ball_i = LA.norm(kk-np.zeros(shape=(784,)),                  np.inf       )
-# print("KKT1: solution is of distance from zeros [L2,Linf] = ", [opt_ball_2,opt_ball_i])
-
-
-#########################################################################################################################################
-################## optimality condition KKT1
-#########################################################################################################################################
-# case 0: define a \mu and make it case_ + \mu (x* - x_d)
-mu = 0.025
-
-# below is gget the gradients
-grad_matrix     = np.zeros(shape=(784,10))
-matrix_with_log = np.zeros(shape=(784,10))
-temp = np.zeros(shape=(10,))
-for i in range(10):
-    temp[i] = np.log2(output_vector_probabilities[i]  /   (output_vector_probabilities[i]+Y_desired[i])  )
-    #np.log2(output_vector_probabilities[i] / (output_vector_probabilities[i] + Y_desired[i]))
-    grad_matrix[:,i]     = grad_discriminant_sm_wrt_1d_img(fake_image, i, trained_model).numpy()[0,:,:].reshape(784,)
-    matrix_with_log[:,i] = temp[i] * grad_matrix[:,i]
-
-sum_of_all_grads_case_1 = np.sum(matrix_with_log,1)
-kk = np.zeros(shape=(784,))
-kk = sum_of_all_grads_case_1 + 2*mu*( fake_image.reshape(784,) - X_desired.reshape(784,)  )
-
-
-opt_ball_2 = LA.norm(kk-np.zeros(shape=(784,)),                  2       )
-opt_ball_i = LA.norm(kk-np.zeros(shape=(784,)),                  np.inf       )
-print("KKT1: solution is of distance from zeros [L2,Linf] = ", [opt_ball_2,opt_ball_i])
-
-################## optimality condition KKT2
-# we can say that KKT2 can be replaces by the SSIM index, hence report SSIM
-#KKT2 = LA.norm(fake_image.reshape(784,) - X_desired.reshape(784,),2)*LA.norm(fake_image.reshape(784,) - X_desired.reshape(784,),2)
-
-
-
-################## optimality condition KKT3
-if mu >= 0:
-    print("KKT2 is satisfied")
-
-
-
-
-
-
-
-
-
-#
-# opt_ball = LA.norm(sum_of_all_grads_case_1-np.zeros(shape=(784,)),                  2       )
-# print("solution for case 1 is of L2 distance from zeros which is = ", opt_ball)
-#
-#
-# sum_of_all_grads = np.sum(grad_matrix,1)
-# # hence solution is of by the lp distance of sum_of_all_grads and vector of all zeros
-# opt_ball = LA.norm(sum_of_all_grads-np.zeros(shape=(784,)),                  2       )
-# print("solution for case 3 is of L2 distance from zeros which is = ", opt_ball)
-
-# #########################################################################################################################################
-# ################## optimality condition KKT1 case 3:
-# #########################################################################################################################################
-# # \sum_{i\in[M]} grad(J_i(X^*)) = 0
-#
-# # for x^* obtained from the above algorithm, get grad(J_i(X^*)) for i \in [M]
-#
-# # for below function to work, we need a model with 1-D input AND seperate last dense and activation
-#
-# grad_matrix = np.zeros(shape=(784,10))
-# for i in range(10):
-#     grad_matrix[:,i] = grad_discriminant_sm_wrt_1d_img(fake_image, i, trained_model).numpy()[0,:,:].reshape(784,)
-#
-# sum_of_all_grads = np.sum(grad_matrix,1)
-# # hence solution is of by the lp distance of sum_of_all_grads and vector of all zeros
-# opt_ball = LA.norm(sum_of_all_grads-np.zeros(shape=(784,)),                  2       )
-# print("solution is of L2 distance from zeros which is = ", opt_ball)
 
 
 print('break')
