@@ -61,9 +61,9 @@ def grad_discriminant_sm_wrt_1d_img(input_image, lbl, model):
 
 
 #########################################################################################################################################
-############################### relu_scaler_Ismail  ######
+############################### relu_scaler_  ######
 #########################################################################################################################################
-def relu_scaler_Ismail(x):
+def relu_scaler_(x):
     '''
 
     :param x: scaler
@@ -449,8 +449,8 @@ for idx in range(50):
 
         ##### dynamic weight selection option in training
         if dynamic_weights_selection is True:
-            lambda_gen = relu_scaler_Ismail(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
-            lambda_pmf = relu_scaler_Ismail(lambda_pmf       -   0.05 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
+            lambda_gen = relu_scaler_(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
+            lambda_pmf = relu_scaler_(lambda_pmf       -   0.05 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
         else:
             lambda_gen = 1
             lambda_pmf = 0.02
@@ -507,24 +507,7 @@ for idx in range(50):
     # JS_boundary.append([D_JS])
     # SSIM_boundary.append([D_ssim_images])
 
-import pickle
-pickle.dump(JS_bounday_per_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/JS_bounday_per_train_step.p","wb"))
-pickle.dump(SSIM_bounday_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/SSIM_bounday_train_step.p","wb"))
-pickle.dump(kk_2_bounday_per_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/kk_2_bounday_per_train_step.p","wb"))
-pickle.dump(kk_i_bounday_per_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/kk_i_bounday_per_train_step.p","wb"))
 
-# import pickle
-# pickle.dump(perturbed_images_boundary,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/perturbed_images_boundary.p","wb"))
-# pickle.dump(prob_vectors_boundary,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/prob_vectors_boundary.p","wb"))
-# pickle.dump(JS_boundary,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/JS_boundary.p","wb"))
-# pickle.dump(SSIM_boundary,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/SSIM_boundary.p","wb"))
-
-
-pickle.dump(perturbed_images_boundary,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/labels_boundary_save.p","wb"))
-
-
-
-#pickle.dump(target_lbl_save,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/target_lbl_save.p","wb"))
 
 
 
