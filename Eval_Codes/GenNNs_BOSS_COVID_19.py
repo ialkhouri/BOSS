@@ -103,17 +103,21 @@ def D_JS_PMFs(p, q):
 #################################################################
 """
 dataset is from https://www.kaggle.com/tawsifurrahman/covid19-radiography-database
+
+pull up X_test and Y_test accordingly
+
 """
 
-X_test = pickle.load(open("/home/ismail/pycharmProjects/SSLTL_project/COVID-19_Xray_data/X_test.p","rb"))
-Y_test = pickle.load(open("/home/ismail/pycharmProjects/SSLTL_project/COVID-19_Xray_data/Y_test.p","rb"))
+
+
+
 
 
 #################################################################
 ########################################## test model
 #################################################################
 
-trained_model = load_model('/home/ismail/pycharmProjects/SSLTL_project/RL_adv_attacks_LP/trained_model_COVID_19_2.h5')
+trained_model = load_model('trained_model_COVID_19_2.h5')
 
 number_of_classes = 4
 
@@ -140,7 +144,7 @@ for layer in trained_model.layers:
 gen_NN = tf.keras.Sequential()
 initializer = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.05, seed=102)
 ## ADDING THE GEN MODEL layers that will be trained
-#trained_model = load_model('/home/ismail/pycharmProjects/SSLTL_project/RL_adv_attacks_LP/trained_model_COVID_19.h5')
+
 layer = layers.Dense(74 * 74 * 256, use_bias=False, input_shape=(100,), name='dense_gen', kernel_initializer=initializer)
 layer.trainable=True
 gen_NN.add(layer)
@@ -388,7 +392,7 @@ for i in range(traning_steps):
 
 
 
-    trained_model = load_model('/home/ismail/pycharmProjects/SSLTL_project/RL_adv_attacks_LP/trained_model_COVID_19_2.h5')
+    trained_model = load_model('trained_model_COVID_19_2.h5')
     output_vector_probabilities = trained_model(fake_image.reshape(1, 296, 296, 1)).numpy()[0]
 
     #output_vector_probabilities = combined_NN(X_val)[1].numpy().reshape(10,)
@@ -413,8 +417,8 @@ for i in range(traning_steps):
 
     ##### dynamic weight selection option in training
     if dynamic_weights_selection is True:
-        lambda_gen = relu_scaler_Ismail(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
-        lambda_pmf = relu_scaler_Ismail(lambda_pmf       -   0.01 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
+        lambda_gen = relu_scaler_(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
+        lambda_pmf = relu_scaler_(lambda_pmf       -   0.01 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
     else:
         lambda_gen = 1
         lambda_pmf = 0.01
@@ -423,11 +427,12 @@ for i in range(traning_steps):
     ### SAVE THE DISTNCE AND PERTURBED IMAGE SO AS TO TAKE THE MINIMUM AT THE END OF THE TRAINING STEP (THIS IS TO OVER COME OVERFITTING DURING TRAINING)
 
 
+    
 
 fake_image = combined_NN(X_val)[0].numpy().reshape(296,296)
 
 ### below is the same thing (just for sanity check)
-trained_model = load_model('/home/ismail/pycharmProjects/SSLTL_project/RL_adv_attacks_LP/trained_model_COVID_19_2.h5')
+trained_model = load_model('trained_model_COVID_19_2.h5')
 output_vector_probabilities   = trained_model(fake_image.reshape(1,296,296,1)).numpy()[0]
 #output_vector_probabilities_2 = combined_NN(X_val)[1].numpy().reshape(10,)
 # this is to make sure that above vectr are identical
