@@ -39,9 +39,9 @@ import random
 import cv2
 
 #########################################################################################################################################
-############################### relu_scaler_Ismail  ######
+############################### relu_scaler_  ######
 #########################################################################################################################################
-def relu_scaler_Ismail(x):
+def relu_scaler_(x):
     '''
 
     :param x: scaler
@@ -102,13 +102,9 @@ def D_JS_PMFs(p, q):
 ########################################## load data set
 #################################################################
 
-
-with open('/home/ismail/pycharmProjects/SSLTL_project/RL_adv_attacks_LP/GTSRB_pickle/train.p', 'rb') as f:
-    train_data = pickle.load(f)
-with open('/home/ismail/pycharmProjects/SSLTL_project/RL_adv_attacks_LP/GTSRB_pickle/valid.p', 'rb') as f:
-    val_data = pickle.load(f)
-with open('/home/ismail/pycharmProjects/SSLTL_project/RL_adv_attacks_LP/GTSRB_pickle/test.p', 'rb') as f:
-    test_data = pickle.load(f)
+"""
+Download GTSRB data
+"""
 
 X_train, y_train = train_data['features'], train_data['labels']
 X_val, y_val = val_data['features'], val_data['labels']
@@ -461,8 +457,8 @@ for i in range(traning_steps):
 
     ##### dynamic weight selection option in training
     if dynamic_weights_selection is True:
-        lambda_gen = relu_scaler_Ismail(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
-        lambda_pmf = relu_scaler_Ismail(lambda_pmf       -   0.01 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
+        lambda_gen = relu_scaler_(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
+        lambda_pmf = relu_scaler_(lambda_pmf       -   0.01 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
     else:
         lambda_gen = 1
         lambda_pmf = 0.01
