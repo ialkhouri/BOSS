@@ -61,9 +61,9 @@ def grad_discriminant_sm_wrt_1d_img(input_image, lbl, model):
 
 
 #########################################################################################################################################
-############################### relu_scaler_Ismail  ######
+############################### relu_scaler_  ######
 #########################################################################################################################################
-def relu_scaler_Ismail(x):
+def relu_scaler_(x):
     '''
 
     :param x: scaler
@@ -499,10 +499,10 @@ for idx in idx_to_pick:
 
             ##### dynamic weight selection option in training
             if dynamic_weights_selection is True:
-                lambda_gen = relu_scaler_Ismail(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
-                lambda_pmf_1 = relu_scaler_Ismail(lambda_pmf_1       -   0.05 * 0.02 * ((delta_js/D_JS_1))            * np.sign((delta_js/D_JS_1           )-1))
-                #lambda_pmf_2 = relu_scaler_Ismail(lambda_pmf_2 - 0.05 * 0.02 * ((delta_js / D_JS_2)) * np.sign((delta_js / D_JS_2) - 1))
-                lambda_pmf_3 = relu_scaler_Ismail(lambda_pmf_3 - 0.05 * 0.02 * ((delta_js / D_JS_3)) * np.sign((delta_js / D_JS_3) - 1))
+                lambda_gen = relu_scaler_(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
+                lambda_pmf_1 = relu_scaler_(lambda_pmf_1       -   0.05 * 0.02 * ((delta_js/D_JS_1))            * np.sign((delta_js/D_JS_1           )-1))
+                #lambda_pmf_2 = relu_scaler_(lambda_pmf_2 - 0.05 * 0.02 * ((delta_js / D_JS_2)) * np.sign((delta_js / D_JS_2) - 1))
+                lambda_pmf_3 = relu_scaler_(lambda_pmf_3 - 0.05 * 0.02 * ((delta_js / D_JS_3)) * np.sign((delta_js / D_JS_3) - 1))
             else:
                 lambda_gen = 1
                 lambda_pmf = 0.02
@@ -536,12 +536,7 @@ for idx in idx_to_pick:
 
 
 
-import pickle
-pickle.dump(perturbed_images_ens_same_tar,open("/home/ismail/pycharmProjects/SSLTL_project/GenNNs_data/perturbed_images_ens_same_tar_lbl8.p","wb"))
-pickle.dump(prob_vectors_ens_same_tar,open("/home/ismail/pycharmProjects/SSLTL_project/GenNNs_data/prob_vectors_ens_same_tar_lbl8.p","wb"))
-pickle.dump(JSs__ens_same_tar,open("/home/ismail/pycharmProjects/SSLTL_project/GenNNs_data/JSs__ens_same_tar_lbl8.p","wb"))
-pickle.dump(SSIM_ens_same_tar,open("/home/ismail/pycharmProjects/SSLTL_project/GenNNs_data/SSIM_ens_same_tar_lbl8.p","wb"))
-pickle.dump(confidence__ens_same_tar,open("/home/ismail/pycharmProjects/SSLTL_project/GenNNs_data/confidence__ens_same_tar_lbl8.p","wb"))
+
 
 
 
