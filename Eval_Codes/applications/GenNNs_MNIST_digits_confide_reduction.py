@@ -61,9 +61,9 @@ def grad_discriminant_sm_wrt_1d_img(input_image, lbl, model):
 
 
 #########################################################################################################################################
-############################### relu_scaler_Ismail  ######
+############################### relu_scaler_  ######
 #########################################################################################################################################
-def relu_scaler_Ismail(x):
+def relu_scaler_(x):
     '''
 
     :param x: scaler
@@ -188,9 +188,7 @@ trained_model = load_model("MNIST_digits_trained_range_1to1_1d_input.h5") # inpu
 #
 # print('For clean env, we get [ Avg_confidence,Avg_JS] =  ', [np.mean(confidence_clean_MNIST),np.mean(JS_clean_MNIST)])
 
-import pickle
-#pickle.dump(confidence_clean_CIFAR,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/confidence_clean_CIFAR.p","wb"))
-#pickle.dump(JS_clean_CIFAR,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/JS_clean_CIFAR.p","wb"))
+
 
 
 # ####################################################################################################################
@@ -207,7 +205,7 @@ import pickle
 #     #output_vector_probabilities = trained_model(X_test_sample.reshape(1,28,28,1)).numpy()[0]
 #     #confidence_1st_200_images.append(np.max(output_vector_probabilities))
 #
-# #pickle.dump(clean_200_test_images,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/clean_200_test_images.p","wb"))
+
 
 
 ######## freeze trained_model
@@ -490,8 +488,8 @@ for idx in range(20):
 
         ##### dynamic weight selection option in training
         if dynamic_weights_selection is True:
-            lambda_gen = relu_scaler_Ismail(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
-            lambda_pmf = relu_scaler_Ismail(lambda_pmf       -   0.05 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
+            lambda_gen = relu_scaler_(lambda_gen       -   0.01 * 1    * ((D_ssim_images/delta_ssim)) * np.sign((D_ssim_images/delta_ssim)-1))
+            lambda_pmf = relu_scaler_(lambda_pmf       -   0.05 * 0.02 * ((delta_js/D_JS))            * np.sign((delta_js/D_JS           )-1))
         else:
             lambda_gen = 1
             lambda_pmf = 0.02
@@ -569,19 +567,6 @@ for idx in range(20):
     # SSIM__conf_red.append([D_ssim_images])
 
 
-# import pickle
-# pickle.dump(perturbed_images_conf_red,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/perturbed_images_conf_red.p","wb"))
-# pickle.dump(prob_vectors_conf_red,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/prob_vectors_conf_red.p","wb"))
-# pickle.dump(JS_conf_red,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/JS_conf_red.p","wb"))
-# pickle.dump(SSIM__conf_red,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/SSIM__conf_red.p","wb"))
-
-import pickle
-pickle.dump(JS_conf_red_per_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/JS_conf_red_per_train_step_2.p","wb"))
-pickle.dump(SSIM_conf_per_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/SSIM_conf_per_train_step_2.p","wb"))
-pickle.dump(kk_2_per_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/kk_2_con_red_per_train_step_2.p","wb"))
-pickle.dump(kk_i_per_train_step,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/kk_i_con_red_per_train_step_2.p","wb"))
-pickle.dump(lambda_g_save,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/lambda_g_save.p","wb"))
-pickle.dump(lambda_h_save,open("/home/user/Desktop/ISMAIL/SSLTL/SSLTL_project/GenNNs_data/lambda_h_save.p","wb"))
 
 
 
